@@ -1,0 +1,16 @@
+# Python:
+*.py[cod]
+*.so
+*.egg
+*.egg-info
+dist
+build
+
+# lib
+/node_modules/
+/jiyan/
+
+# big file
+*.png
+*.data
+.DS_Store

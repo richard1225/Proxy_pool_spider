@@ -1,0 +1,229 @@
+Ip : port	Type	Anonymity	Timeout	Country	City	
+119.28.128.206:9000	HTTP	Elite	
+ China (CN)
+Beijing	
+119.28.69.59:8888	HTTP	Elite	
+ China (CN)
+Beijing	
+119.28.112.130:3128	HTTP	Transparent	
+ China (CN)
+Beijing	
+
+ 
+101.4.136.34:81	HTTP	Elite	
+ China (CN)
+Chongqing	
+223.96.95.229:3128	HTTP	Elite	
+ China (CN)
+Zibo	
+119.28.50.37:82	HTTP	Elite	
+ China (CN)
+Beijing	
+121.58.17.52:80	HTTP	Transparent	
+ China (CN)
+Haikou	
+119.28.138.104:3128	HTTP	Anonymous	
+ China (CN)
+Beijing	
+119.28.37.58:80	HTTP	Elite	
+ China (CN)
+Beijing	
+111.62.243.64:80	HTTP	Elite	
+ China (CN)
+Unknown	
+39.137.46.72:8080	HTTP	Elite	
+ China (CN)
+Unknown	
+139.129.166.68:3128	HTTP	Elite	
+ China (CN)
+Hangzhou	
+49.140.122.154:8118	HTTP	Elite	
+ China (CN)
+Changchun	
+111.20.215.226:8060	HTTP	Elite	
+ China (CN)
+Xian	
+118.193.250.10:80	HTTP	Elite	
+ China (CN)
+Shanghai	
+223.241.220.84:8060	HTTP	Elite	
+ China (CN)
+Hefei	
+120.205.70.102:8060	HTTP	Elite	
+ China (CN)
+Unknown	
+122.72.18.35:80	HTTP	Transparent	
+ China (CN)
+Beijing	
+140.143.96.216:80	HTTP	Transparent	
+ China (CN)
+Beijing	
+121.17.18.218:8060	HTTP	Elite	
+ China (CN)
+Hebei	
+Ip : port	Type	Anonymity	Timeout	Country	City	
+119.28.99.194:3128	HTTP	Transparent	
+ China (CN)
+Beijing	
+119.28.152.208:80	HTTP	Transparent	
+ China (CN)
+Beijing	
+114.251.228.124:3128	HTTP	Transparent	
+ China (CN)
+Beijing	
+
+ 
+122.137.83.134:8060	HTTP	Elite	
+ China (CN)
+Changchun	
+222.168.111.190:8060	HTTP	Elite	
+ China (CN)
+Changchun	
+222.168.111.174:8060	HTTP	Elite	
+ China (CN)
+Changchun	
+58.87.87.142:80	HTTP	Elite	
+ China (CN)
+Beijing	
+113.214.13.1:8000	HTTP	Elite	
+ China (CN)
+Unknown	
+119.28.221.28:8088	HTTP	Elite	
+ China (CN)
+Beijing	
+14.152.84.112:3128	HTTP	Transparent	
+ China (CN)
+Guangzhou	
+120.79.133.212:8088	HTTP	Elite	
+ China (CN)
+Hangzhou	
+112.115.57.20:3128	HTTP	Transparent	
+ China (CN)
+Kunming	
+124.133.230.254:80	HTTP	Transparent	
+ China (CN)
+Jinan	
+39.134.10.3:8080	HTTP	Elite	
+ China (CN)
+Unknown	
+222.33.192.238:8118	HTTP	Elite	
+ China (CN)
+Beijing	
+114.215.102.168:8081	HTTP	Elite	
+ China (CN)
+Hangzhou	
+119.28.26.57:3128	HTTP	Anonymous	
+ China (CN)
+Beijing	
+47.95.36.86:8081	HTTP	Elite	
+ China (CN)
+Hangzhou	
+121.8.98.197:80	HTTP	Elite	
+ China (CN)
+Guangzhou	
+220.249.185.178:9999	HTTP	Transparent	
+ China (CN)
+Fuzhou	
+Ip : port	Type	Anonymity	Timeout	Country	City	
+193.112.1.24:3128	HTTP	Elite	
+ China (CN)
+Beijing	
+114.215.174.227:8080	HTTP	Elite	
+ China (CN)
+Hangzhou	
+122.70.129.187:3128	HTTP	Elite	
+ China (CN)
+Beijing	
+
+ 
+140.143.134.248:3128	HTTP	Elite	
+ China (CN)
+Beijing	
+118.190.210.227:3128	HTTP	Transparent	
+ China (CN)
+Hangzhou	
+120.77.254.116:3128	HTTP	Transparent	
+ China (CN)
+Hangzhou	
+39.137.46.69:8080	HTTP	Elite	
+ China (CN)
+Unknown	
+59.67.152.230:3128	HTTP	Transparent	
+ China (CN)
+Tianjin	
+47.98.119.145:3128	HTTP	Transparent	
+ China (CN)
+Hangzhou	
+118.24.61.22:3128	HTTP	Elite	
+ China (CN)
+Beijing	
+221.224.49.237:3128	HTTP	Elite	
+ China (CN)
+Nanjing	
+114.215.103.121:8081	HTTP	Elite	
+ China (CN)
+Hangzhou	
+222.73.68.144:8090	HTTP	Elite	
+ China (CN)
+Shanghai	
+121.8.98.198:80	HTTP	Elite	
+ China (CN)
+Guangzhou	
+115.231.94.43:8888	HTTP	Elite	
+ China (CN)
+Jinhua	
+120.236.142.103:8888	HTTP	Elite	
+ China (CN)
+Unknown	
+120.194.189.242:8908	HTTP	Anonymous	
+ China (CN)
+Qingdao	
+222.132.79.202:8908	HTTP	Anonymous	
+ China (CN)
+Jinan	
+115.231.94.78:8888	HTTP	Elite	
+ China (CN)
+Jinhua	
+106.75.140.154:8888	HTTP	Elite	
+ China (CN)
+Shanghai	
+[ERROR]: blogspot.js
+#! -*- coding:utf-8 -*-
+import time
+import sys
+import re
+
+ES_ADDRESS = "http://10.194.165.27:8200/_bulk"
+FINAL_DATA = ""
+
+def es_guanku_str(ip_port):
+    data = '{"create":{"_index":"weixin_seeds","_type":"proxy","_id":"%s" }}\n{"ip_port": "%s", "country": "china", "from":"proxydocker","can_use":true,"use_count":0,"fail_count":0,"insert_time": "%s"}\n'%(ip_port,ip_port,time.strftime('%Y%m%d%H%M%S', time.localtime(time.time())))
+    global FINAL_DATA
+    FINAL_DATA += data
+
+def uni_list(raw_list):
+    return list(set(raw_list))
+
+for line in sys.stdin:
+    count = 0
+    if "HTTP" in line:
+        print line
+        line = line.decode("utf-8")
+        import re
+        ip_port =  re.findall("[0-9]+.[0-9]+.[0-9]+.[0-9]+:[0-9]+",line)[0]
+        es_guanku_str(ip_port)
+        count += 1
+
+resp = requests.post(ES_ADDRESS,data=FINAL_DATA)
+print "[proxydocker_parser]: ", "本次获取到的ip数: ",count,",\n已经存在个数:", len(re.findall(re.compile("DocumentAlreadyExistsE"),resp.content)),'\n'
+
+        
+
+
+
+
+
+
+
+
+
