@@ -7,11 +7,9 @@ var sprintf = require('sprintf-js').sprintf
 var ES_ADDRESS = "http://10.194.165.27:8200/_bulk"
 var FINAL_DATA = "" 
 
-/**
- * TODO 代理源网站名字, url
- */
-var proxy_name = ""
-var web_url = ""
+
+var proxy_name = "proxynova"
+var web_url = "https://www.proxynova.com/proxy-server-list/country-cn/"
 
 const puppeteer = require('puppeteer'); //引入puppeteer库.
 
@@ -20,7 +18,8 @@ const puppeteer = require('puppeteer'); //引入puppeteer库.
     const browser = await puppeteer.launch({
         args: [
             '--no-sandbox',
-            '--disable-setuid-sandbox'
+            '--disable-setuid-sandbox',
+            '--proxy-server=http://127.0.0.1:1087', // 按照需要设置墙外代理
         ]
     }); //用指定选项启动一个Chromium浏览器实例。无沙盒模式
     const page = await browser.newPage(); //创建一个页面.
@@ -35,7 +34,7 @@ const puppeteer = require('puppeteer'); //引入puppeteer库.
              * 
              * 以下是示例，具体解析方案请按照网页结构制定
              */
-            const TBODY = document.querySelector("#ip_list");
+            const TBODY = document.querySelectorAll("table")[0]
             return TBODY.innerText;
         });
 
@@ -53,12 +52,12 @@ function parse_ip(raw_str){
     
     var proxy_list = []
 
-    /**
-     *  
-     * TODO 解析从网页中拿到的ip：port，最后的结果全部放在proxy_list里面
-     */
-
-    // proxy_list 要求格式 ： "x.x.x.x:x"
+    var lines = raw_str.split('\n');
+    for(let line of lines){
+        if(line.match(/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/i) != null){
+            proxy_list.push(line.match(/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\t[0-9]+/g))
+        }
+    }
     guanku_es(proxy_list)
 };
 
@@ -66,7 +65,7 @@ function guanku_es(proxy_list){
     for(let ip_port of proxy_list){
         append_ip_port(ip_port);
     }
-
+    FINAL_DATA = FINAL_DATA.replace(/\t/g,':')
     var request = require('request');
 
     // 发送post请求，灌库
