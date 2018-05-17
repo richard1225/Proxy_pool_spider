@@ -1,5 +1,9 @@
 'use strict';
 /**
+ *  author: Richard
+ *  email : yezhijie@baidu.com
+ *  date  : 2018/05/17
+ * 
  * 完成3个TODO，分别是脚本名称，解析网页代码，解析响应内容成 "ip:port" 的字符串数组形式
  */
 
@@ -7,9 +11,6 @@ var sprintf = require('sprintf-js').sprintf
 var ES_ADDRESS = "http://10.194.165.27:8200/_bulk"
 var FINAL_DATA = "" 
 
-/**
- * TODO 代理源网站名字, url
- */
 var proxy_name = "mimvp"
 var web_url1 = "https://proxy.mimvp.com/free.php?proxy=in_tp"
 var web_url2 = "https://proxy.mimvp.com/free.php?proxy=in_hp"
@@ -32,12 +33,7 @@ const puppeteer = require('puppeteer'); //引入puppeteer库.
         
         const proxy_list = await page.evaluate(() => {
             var total_list = []
-            /**
-             * TODO 解析所抓取的网页，从网页中提取出ip和端口，给后面做进一步解析
-             * 
-             * 以下是示例，具体解析方案请按照网页结构制定
-             */
-            
+
             const tbody = document.querySelector(".free-table.table.table-bordered.table-striped");
             var url_list = tbody.innerHTML.match(/common\/ygrandimg\.php\?id=[\S]+"/g);
             var ip_list = tbody.innerHTML.match(/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/g);
@@ -60,11 +56,6 @@ const puppeteer = require('puppeteer'); //引入puppeteer库.
         
         const proxy_list2 = await page.evaluate(() => {
             var total_list = []
-            /**
-             * TODO 解析所抓取的网页，从网页中提取出ip和端口，给后面做进一步解析
-             * 
-             * 以下是示例，具体解析方案请按照网页结构制定
-             */
             
             const tbody = document.querySelector(".free-table.table.table-bordered.table-striped");
             var url_list = tbody.innerHTML.match(/common\/ygrandimg\.php\?id=[\S]+"/g);
@@ -102,6 +93,10 @@ function parse_ip(raw_str){
      */
 
     // proxy_list 要求格式 ： "x.x.x.x:x"
+    if(proxy_list  == null){
+        console.log('['+proxy_name+']: 无代理数据'+'\t['+getNow()+']' + '\n')
+        return ;
+    }
     guanku_es(proxy_list)
 };
 

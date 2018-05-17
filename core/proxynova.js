@@ -1,5 +1,9 @@
 'use strict';
 /**
+ * author: Richard
+ * email : yezhijie@baidu.com
+ * date  : 2018/05/17
+ * 
  * 完成3个TODO，分别是脚本名称，解析网页代码，解析响应内容成 "ip:port" 的字符串数组形式
  */
 
@@ -29,11 +33,6 @@ const puppeteer = require('puppeteer'); //引入puppeteer库.
         
         const proxy_str = await page.evaluate(() => {
 
-            /**
-             * TODO 解析所抓取的网页，从网页中提取出ip和端口，给后面做进一步解析
-             * 
-             * 以下是示例，具体解析方案请按照网页结构制定
-             */
             const TBODY = document.querySelectorAll("table")[0]
             return TBODY.innerText;
         });
@@ -52,11 +51,11 @@ function parse_ip(raw_str){
     
     var proxy_list = []
 
-    var lines = raw_str.split('\n');
-    for(let line of lines){
-        if(line.match(/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/i) != null){
-            proxy_list.push(line.match(/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\t[0-9]+/g))
-        }
+    proxy_list = raw_str.match(/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\t[0-9]+/g)
+
+    if(proxy_list  == null){
+        console.log('['+proxy_name+']: 无代理数据'+'\t['+getNow()+']' + '\n')
+        return ;
     }
     guanku_es(proxy_list)
 };

@@ -1,5 +1,9 @@
 'use strict';
 /**
+ * author: Richard
+ * email : yezhijie@baidu.com
+ * date  : 2018/05/17
+ * 
  * 完成3个TODO，分别是脚本名称，解析网页代码，解析响应内容成 "ip:port" 的字符串数组形式
  */
 
@@ -54,11 +58,18 @@ function parse_ip(raw_str){
     var proxy_list = []
 
     /**
-     *  
      * TODO 解析从网页中拿到的ip：port，最后的结果全部放在proxy_list里面
+     * 
+     * example:
+     *   proxy_list = raw_str.match(/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+:[0-9]+/g)
      */
 
     // proxy_list 要求格式 ： "x.x.x.x:x"
+    if(proxy_list  == null){
+        console.log('['+proxy_name+']: 无代理数据'+'\t['+getNow()+']' + '\n')
+        return ;
+    }
+
     guanku_es(proxy_list)
 };
 
