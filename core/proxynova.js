@@ -5,10 +5,11 @@
 
 var sprintf = require('sprintf-js').sprintf
 var ES_ADDRESS = "http://10.194.165.27:8200/_bulk"
-
-var web_url = "http://www.xicidaili.com/nt"
 var FINAL_DATA = "" 
-var proxy_name = "xicidaili" // TODO 代理源网站名字
+
+
+var proxy_name = "proxynova"
+var web_url = "https://www.proxynova.com/proxy-server-list/country-cn/"
 
 const puppeteer = require('puppeteer'); //引入puppeteer库.
 
@@ -17,21 +18,27 @@ const puppeteer = require('puppeteer'); //引入puppeteer库.
     const browser = await puppeteer.launch({
         args: [
             '--no-sandbox',
-            '--disable-setuid-sandbox'
+            '--disable-setuid-sandbox',
+            '--proxy-server=http://127.0.0.1:1087', // 按照需要设置墙外代理
         ]
     }); //用指定选项启动一个Chromium浏览器实例。无沙盒模式
-
     const page = await browser.newPage(); //创建一个页面.
-    try{
-        await page.goto(web_url); //到指定页面的网址.
-        // await page.screenshot({path: '../screen/xicidaili1.png'}); //截图并保存到当前路径，名称为page1.png.
 
+    try{
+        await page.goto(web_url); // 跳到指定页面的网址.
+        
         const proxy_str = await page.evaluate(() => {
-            // TODO 获取网站中的ip数据，需要写解析网站的js，以下是示例
-            const TBODY = document.querySelector("#ip_list");
+
+            /**
+             * TODO 解析所抓取的网页，从网页中提取出ip和端口，给后面做进一步解析
+             * 
+             * 以下是示例，具体解析方案请按照网页结构制定
+             */
+            const TBODY = document.querySelectorAll("table")[0]
             return TBODY.innerText;
         });
-        // console.log(proxy_str)
+
+        // 再次解析
         parse_ip(proxy_str);
 
     }catch (err) {
@@ -42,38 +49,38 @@ const puppeteer = require('puppeteer'); //引入puppeteer库.
 })();
 
 function parse_ip(raw_str){
-    // TODO 解析从网页中拿到的ip：port，最后的结果全部放在proxy_list里面
-    var proxy_list = [];
+    
+    var proxy_list = []
+
     var lines = raw_str.split('\n');
     for(let line of lines){
         if(line.match(/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/i) != null){
             proxy_list.push(line.match(/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\t[0-9]+/g))
         }
     }
-    // console.log();
-    guanku_es(proxy_list);
+    guanku_es(proxy_list)
 };
+
 function guanku_es(proxy_list){
     for(let ip_port of proxy_list){
         append_ip_port(ip_port);
     }
-
-    var request = require('request');
     FINAL_DATA = FINAL_DATA.replace(/\t/g,':')
+    var request = require('request');
 
+    // 发送post请求，灌库
     request({
         url: ES_ADDRESS,
         method: "POST",
         body: FINAL_DATA
     }, function (error, response, body){
-        
         console.log('['+proxy_name+"]：获得新的ip数："+(proxy_list.length - response.body.match(/DocumentAlreadyExistsException/g).length)+'/'+proxy_list.length+'\t['+getNow()+']' + '\n');
-        // console.log(body)
+        
     });
 }
 
 function append_ip_port(ip_port){
-    var data = sprintf('{"create":{"_index":"weixin_seeds","_type":"proxy","_id":"%1$s" }}\n{"ip_port": "%2$s", "country": "china", "from":"xicidaili","can_use":true,"use_count":0,"fail_count":0,"insert_time": "%3$s"}\n',ip_port,ip_port,getNow())
+    var data = sprintf('{"create":{"_index":"weixin_seeds","_type":"proxy","_id":"%1$s" }}\n{"ip_port": "%2$s", "country": "china", "from":"%4$s","can_use":true,"use_count":0,"fail_count":0,"insert_time": "%3$s"}\n',ip_port,ip_port,getNow(),proxy_name)
     FINAL_DATA += data
 }
 

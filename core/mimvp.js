@@ -10,8 +10,9 @@ var FINAL_DATA = ""
 /**
  * TODO 代理源网站名字, url
  */
-var proxy_name = ""
-var web_url = ""
+var proxy_name = "mimvp"
+var web_url1 = "https://proxy.mimvp.com/free.php?proxy=in_tp"
+var web_url2 = "https://proxy.mimvp.com/free.php?proxy=in_hp"
 
 const puppeteer = require('puppeteer'); //引入puppeteer库.
 
@@ -25,22 +26,63 @@ const puppeteer = require('puppeteer'); //引入puppeteer库.
     }); //用指定选项启动一个Chromium浏览器实例。无沙盒模式
     const page = await browser.newPage(); //创建一个页面.
 
+    
     try{
-        await page.goto(web_url); // 跳到指定页面的网址.
+        await page.goto(web_url1); // 跳到指定页面的网址.
         
-        const proxy_str = await page.evaluate(() => {
-
+        const proxy_list = await page.evaluate(() => {
+            var total_list = []
             /**
              * TODO 解析所抓取的网页，从网页中提取出ip和端口，给后面做进一步解析
              * 
              * 以下是示例，具体解析方案请按照网页结构制定
              */
-            const TBODY = document.querySelector("#ip_list");
-            return TBODY.innerText;
-        });
+            
+            const tbody = document.querySelector(".free-table.table.table-bordered.table-striped");
+            var url_list = tbody.innerHTML.match(/common\/ygrandimg\.php\?id=[\S]+"/g);
+            var ip_list = tbody.innerHTML.match(/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/g);
 
-        // 再次解析
-        parse_ip(proxy_str);
+            if(url_list.length == ip_list.length){
+                while(url_list.length != 0){
+                    url = "https://proxy.mimvp.com/"+url_list.pop();
+                    total_list.push(ip_list.pop()+"----"+url.replace(/&amp;/,'&'));
+                }
+                
+            }
+            return total_list;
+        });
+        for (let proxy of proxy_list){
+            console.log(proxy);
+        }
+
+        await page.goto(web_url2); // 跳到指定页面的网址.
+        
+        
+        const proxy_list2 = await page.evaluate(() => {
+            var total_list = []
+            /**
+             * TODO 解析所抓取的网页，从网页中提取出ip和端口，给后面做进一步解析
+             * 
+             * 以下是示例，具体解析方案请按照网页结构制定
+             */
+            
+            const tbody = document.querySelector(".free-table.table.table-bordered.table-striped");
+            var url_list = tbody.innerHTML.match(/common\/ygrandimg\.php\?id=[\S]+"/g);
+            var ip_list = tbody.innerHTML.match(/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/g);
+
+            if(url_list.length == ip_list.length){
+                while(url_list.length != 0){
+                    url = "https://proxy.mimvp.com/"+url_list.pop();
+                    total_list.push(ip_list.pop()+"----"+url.replace(/&amp;/,'&'));
+                }
+                
+            }
+            return total_list;
+        });
+        for (let proxy of proxy_list2){
+            console.log(proxy);
+        }
+
 
     }catch (err) {
         console.log(sprintf("[ERROR]: %1$s.js",proxy_name));
