@@ -1,5 +1,5 @@
 while true
 do
-  python varify.py
+  python verify.py
   sleep 30
 done

@@ -1,14 +1,14 @@
 #! -*- coding:utf-8 -*-
+from __future__ import print_function
 import re
 import sys
 import time
 import requests
 import threadpool
 from Queue import Queue
-from __future__ import print_function
 print = lambda x: sys.stdout.write("%s\n" % x)
 
-HOST = "http://10.194.165.27:8200/weixin_seeds/proxy/_search?sort&size=11000"
+HOST = "http://10.194.165.27:8200/weixin_seeds/proxy/_search?sort=insert_time:desc&size=21000"
 GK_ADDRESS = "http://10.194.165.27:8200/_bulk"
 usefullq = Queue(maxsize=0)
 
