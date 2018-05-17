@@ -67,7 +67,7 @@ function guanku_es(proxy_list){
         body: FINAL_DATA
     }, function (error, response, body){
         
-        console.log('['+proxy_name+"]：获得新的ip数："+(proxy_list.length - response.body.match(/DocumentAlreadyExistsException/g).length)+'\t['+getNow()+']' + '\n');
+        console.log('['+proxy_name+"]：获得新的ip数："+(proxy_list.length - response.body.match(/DocumentAlreadyExistsException/g).length)+'/'+proxy_list.length+'\t['+getNow()+']' + '\n');
         // console.log(body)
     });
 }
