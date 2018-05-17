@@ -80,6 +80,7 @@ const puppeteer = require('puppeteer'); //引入puppeteer库.
             return total_list;
         });
         for (let proxy of proxy_list2){
+            // 输出给图片识别模块识别
             console.log(proxy);
         }
 
