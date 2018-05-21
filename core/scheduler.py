@@ -29,7 +29,17 @@ if __name__ == '__main__':
     with open("spider_names.txt") as f:
         raw = f.read()
     # 支持使用#号进行注释
-    names = filter(None,"\n".join(re.split("#[\S\s]+\n*",raw)).split('\n'))
+    names = filter(None,"\n".join(re.split(r"#[\S\s]+\n*",raw)).split('\n'))
 
     scheduler = Scheduler(names)
-    scheduler.handle_spider()
+    import time
+    import random
+    import traceback
+    while True:
+        try:
+            scheduler.handle_spider()
+            # 规避封禁
+            time.sleep(60*random.randint(30,40))
+        except:
+            print traceback.print_exception
+            continue
