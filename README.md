@@ -1,7 +1,10 @@
-# Proxy_pool_spider
-```
-调用方法：用spider下面的./start_proxy.sh启动抓取程序
-```
-## 版本v1.0：
-存在bug：存在抓完之后结束不了的现象，会导致数据丢失.
-原因分析：解析数据是使用管道来做的，会导致 打开文件太多 的错误，需要转成js系统调用python来解析
+# Introduction
+### Proxy spider
+
+A spider program of collecting HTTP or HTTPS proxy, 'collecting' means that it do not scan ip, but scrap proxy IP from some high quality source, such as freeproxy.cn and so on.
+
+# Usage
+`cd core` and run `python scheduler.py`, before you run, you should configure `core/spider_name.txt` to specific which spider you'r gonna to run.
+Also, if you want to extend more spider, just `cp core/mudule.js core/<your_spider>`, and finish 3 TODO in your spider, then you can add your spider name into `core/spider_name.txt`, after that you can run your spider in `python scheduler.py`
+
+### Note: Please replace the ElasticSeach ip and subprocess.Popen() methord in your spider file and `scheduler.py`, or it will not be saved in your database
