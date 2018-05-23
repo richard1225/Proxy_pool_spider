@@ -1,5 +1,4 @@
 # 需要执行的爬虫文件名
 xicidaili.js
-spys.js
-proxynova.js
-proxynova.js
+#spys.js
+#proxynova.js

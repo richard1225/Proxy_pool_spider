@@ -11,8 +11,11 @@ var sprintf = require('sprintf-js').sprintf
 var ES_ADDRESS = "http://10.194.165.27:8200/_bulk"
 var FINAL_DATA = "" 
 
-var proxy_name = "spys"
-var web_url = "http://spys.one/free-proxy-list/CN/"
+/**
+ * TODO 代理源网站名字, url
+ */
+var proxy_name = ""
+var web_url = ""
 
 const puppeteer = require('puppeteer'); //引入puppeteer库.
 
@@ -21,8 +24,7 @@ const puppeteer = require('puppeteer'); //引入puppeteer库.
     const browser = await puppeteer.launch({
         args: [
             '--no-sandbox',
-            '--disable-setuid-sandbox',
-            '--proxy-server=socks5://localhost:1099', // 设置墙外代理
+            '--disable-setuid-sandbox'
         ]
     }); //用指定选项启动一个Chromium浏览器实例。无沙盒模式
     const page = await browser.newPage(); //创建一个页面.
@@ -32,8 +34,12 @@ const puppeteer = require('puppeteer'); //引入puppeteer库.
         
         const proxy_str = await page.evaluate(() => {
 
-            
-            const TBODY = document.querySelectorAll("table")[1]
+            /**
+             * TODO 解析所抓取的网页，从网页中提取出ip和端口，给后面做进一步解析
+             * 
+             * 以下是示例，具体解析方案请按照网页结构制定
+             */
+            const TBODY = document.querySelector("#ip_list");
             return TBODY.innerText;
         });
 
@@ -49,15 +55,21 @@ const puppeteer = require('puppeteer'); //引入puppeteer库.
 
 function parse_ip(raw_str){
     
-    var proxy_list = [];
-    
-    proxy_list = raw_str.match(/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+:[0-9]+/g)
-    
+    var proxy_list = []
+
+    /**
+     * TODO 解析从网页中拿到的ip：port，最后的结果全部放在proxy_list里面
+     * 
+     * example:
+     *   proxy_list = raw_str.match(/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+:[0-9]+/g)
+     */
+
+    // proxy_list 要求格式 ： "x.x.x.x:x"
     if(proxy_list  == null){
         console.log('['+proxy_name+']: 无代理数据'+'\t['+getNow()+']' + '\n')
         return ;
     }
-    // proxy_list 要求格式 ： "x.x.x.x:x"
+
     guanku_es(proxy_list)
 };
 
@@ -74,7 +86,6 @@ function guanku_es(proxy_list){
         method: "POST",
         body: FINAL_DATA
     }, function (error, response, body){
-        // console.log(response)
         console.log('['+proxy_name+"]：获得新的ip数："+(proxy_list.length - response.body.match(/DocumentAlreadyExistsException/g).length)+'/'+proxy_list.length+'\t['+getNow()+']' + '\n');
         
     });
