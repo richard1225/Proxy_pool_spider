@@ -31,7 +31,7 @@ def es_guanku(total_url):
     import re
     resp = requests.post(ES_ADDRESS,data=final_data)
     pattern = re.compile(r'DocumentAlreadyExistsException')
-    exist_list = re.findall(pattern,resp.content)
+    exist_list = re.findall(pattern,resp.content.decode('utf-8'))
 
     print('[mimvp]：获得新的ip数：' + str(len(total_url)-len(exist_list)) + '/' + str(len(total_url)) + '\t' + time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
 
