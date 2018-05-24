@@ -33,7 +33,7 @@ def es_guanku(total_url):
     pattern = re.compile(r'DocumentAlreadyExistsException')
     exist_list = re.findall(pattern,resp.content)
 
-    print '[mimvp]：获得新的ip数：' + str(len(total_url)-len(exist_list)) + '/' + str(len(total_url)) + '\t' + time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+    print('[mimvp]：获得新的ip数：' + str(len(total_url)-len(exist_list)) + '/' + str(len(total_url)) + '\t' + time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
 
 def recognize(ip_url):
     try:
