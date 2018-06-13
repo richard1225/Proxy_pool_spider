@@ -7,8 +7,8 @@
 有两种配置环境的方式
 * 本机上配置
 ``` 
-    # 这步自行根据包管理器的类型来安装
-    install nodejs 7.6+ & install yarn
+    # 这一步自行根据包管理器的类型来安装
+    install nodejs 7.6+ & install yarn
 
     # 安装依赖
     yarn add sprintf-js & yarn add puppeteer & yarn add request
