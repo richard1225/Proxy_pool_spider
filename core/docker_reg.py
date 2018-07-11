@@ -25,7 +25,7 @@ headers = {
 ES_ADDRESS = "http://10.194.165.27:8200/_bulk"
 
 def es_guanku(total_url):
-    print "es_guanku: ", len(total_url)
+    print("es_guanku: ", len(total_url))
     final_data = ""
     for ip_port in total_url:
         data = '{"create":{"_index":"weixin_seeds","_type":"proxy","_id":"%s" }}\n{"ip_port": "%s", "country": "china", "from":"mimvp","can_use":true,"use_count":0,"fail_count":0,"insert_time": "%s"}\n'%(ip_port,ip_port,time.strftime('%Y%m%d%H%M%S', time.localtime(time.time())))
@@ -36,7 +36,7 @@ def es_guanku(total_url):
     pattern = re.compile(r'DocumentAlreadyExistsException')
     exist_list = re.findall(pattern,resp.content.decode('utf-8'))
 
-    print "afterall: ", len(total_url)
+    print("afterall: ", len(total_url))
     print('[mimvp]：获得新的ip数：' + str(len(total_url)-len(exist_list)) + '/' + str(len(total_url)) + '\t' + time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
 
 import traceback
@@ -50,7 +50,7 @@ def recognize(ip_url):
         return ip+':'+port
     except :
         traceback.print_exc()
-        print 'err'
+        prit('err')
         return ""
     
 
@@ -62,7 +62,7 @@ def parse():
         if ip_port != "":
             total_url.append(ip_port)
 
-    print "parse: ", len(total_url)
+    print("parse: ", len(total_url))
     es_guanku(total_url)
 
     
