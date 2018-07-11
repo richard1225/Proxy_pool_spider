@@ -5,7 +5,6 @@ from io import StringIO
 import pytesseract
 import sys
 import time
-import urllib2 as urllib
 import io
 
 headers = {
