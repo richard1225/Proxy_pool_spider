@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "puppeteer": "^1.5.0",
+    "request": "^2.87.0",
+    "reuqest": "^2.81.1",
+    "sprintf-js": "^1.1.1",
+    "xml2js": "^0.4.19"
+  }
+}

@@ -1,0 +1,12 @@
+FROM python
+# for capcha recognization
+RUN apt-get update && apt-get install -y python-pip 
+
+RUN curl https://raw.githubusercontent.com/richard1225/Proxy_pool_spider/master/core/docker_reg.py > main.py
+
+RUN apt-get update && apt-get install -y tesseract-ocr
+RUN pip install --upgrade pip
+RUN easy_install requests && easy_install pillow && easy_install pytesseract
+
+
+CMD ["python", "main.py"]

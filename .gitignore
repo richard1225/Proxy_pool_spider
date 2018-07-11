@@ -9,6 +9,8 @@ build
 # lib
 /node_modules/
 /jiyan/
+*/node_modules/
+IP_trial_2018M05_single_WGS84.dat
 
 # big file
 *.png

@@ -46,7 +46,7 @@ def fetch_proxy():
   return uniqlist
 
 proxy_list = fetch_proxy()
-pool = threadpool.ThreadPool(2000)
+pool = threadpool.ThreadPool(200)
 pool_request = threadpool.makeRequests(request_baidu, proxy_list)
 [pool.putRequest(req) for req in pool_request]
 
